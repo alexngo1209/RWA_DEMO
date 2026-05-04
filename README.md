@@ -40,3 +40,21 @@
           ┌──────────────┐
           │ PostgreSQL   │ (sync state)
           └──────────────┘
+
+## BACKEND STRUCTURE
+
+rwa-backend/
+├── src/
+│ ├── main.ts
+│ ├── app.module.ts
+│
+│ ├──modules/
+│    ├── order/        
+│    ├── auth/        
+│    ├── blockchain/        
+│    ├── tx/
+│ ├── indexer.ts
+│
+├── docker-compose.yml
+├── .env
+├── package.json
