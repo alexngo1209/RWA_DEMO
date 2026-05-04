@@ -17,7 +17,12 @@ export class Order {
 
   @Prop({
     type: String,
-    enum: [Object.values(OrderStatus)],
+    enum: [
+      OrderStatus.FAILED,
+      OrderStatus.PENDING,
+      OrderStatus.SUBMITTED,
+      OrderStatus.SUCCESS,
+    ],
     default: OrderStatus.PENDING,
   })
   status: OrderStatus;

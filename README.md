@@ -53,7 +53,7 @@ rwa-backend/
 │    ├── auth/        
 │    ├── blockchain/        
 │    ├── tx/
-│ ├── indexer.ts
+│    ├── indexer/
 │
 ├── docker-compose.yml
 ├── .env

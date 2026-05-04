@@ -26,8 +26,16 @@ export class OrderService {
     return order;
   }
 
+  async findById(id: string) {
+    return this.model.findById(id);
+  }
+
   async updateTx(orderId: string, txHash: string) {
     await this.model.updateOne({ _id: orderId }, { txHash });
+  }
+
+  async markSubmitted(txHash: string) {
+    await this.model.updateOne({ txHash }, { status: OrderStatus.SUBMITTED });
   }
 
   async markSuccess(txHash: string) {
