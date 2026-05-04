@@ -4,13 +4,14 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import Redis from 'ioredis';
 import { BlockchainService } from '../blockchain/blockchain.service';
+import { JOB_NAMES, QUEUE_NAMES } from 'src/constants/queue';
 
 @Injectable()
 export class IndexerService {
   private redis = new Redis();
 
   constructor(
-    @InjectQueue('indexer-queue') private queue: Queue,
+    @InjectQueue(QUEUE_NAMES.INDEXER) private queue: Queue,
     private readonly blockchain: BlockchainService,
   ) {}
 
@@ -26,7 +27,7 @@ export class IndexerService {
 
       const fromBlock = Math.max(lastBlock - 5, 0);
 
-      await this.queue.add('scan-range', {
+      await this.queue.add(JOB_NAMES.SCAN_RANGE, {
         fromBlock,
         toBlock: latest,
       });

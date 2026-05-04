@@ -5,12 +5,13 @@ import { Queue } from 'bullmq';
 import { Injectable } from '@nestjs/common';
 import { OrderStatus } from './@types';
 import { Order } from './schema/order.schema';
+import { JOB_NAMES, QUEUE_NAMES } from 'src/constants/queue';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectModel(Order.name) private model: Model<Order>,
-    @InjectQueue('tx-queue') private queue: Queue,
+    @InjectQueue(QUEUE_NAMES.TX) private queue: Queue,
   ) {}
 
   async create(user: string, amount: string) {
@@ -19,7 +20,7 @@ export class OrderService {
       amount,
     });
 
-    await this.queue.add('send-tx', {
+    await this.queue.add(JOB_NAMES.SEND_TX, {
       orderId: order._id.toString(),
     });
 

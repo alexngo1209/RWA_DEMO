@@ -7,6 +7,7 @@ import { BlockchainModule } from '../blockchain/blockchain.module';
 import { OrderModule } from '../order/order.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule } from '@nestjs/config';
+import { QUEUE_NAMES } from 'src/constants/queue';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { ConfigModule } from '@nestjs/config';
       { name: IndexEvent.name, schema: IndexEventSchema },
     ]),
     BullModule.registerQueue({
-      name: 'indexer-queue',
+      name: QUEUE_NAMES.INDEXER,
     }),
     BlockchainModule,
     OrderModule,
