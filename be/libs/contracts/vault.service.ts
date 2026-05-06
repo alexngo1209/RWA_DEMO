@@ -29,11 +29,12 @@ export class VaultService {
         return vaults[chainId];
     }
 
-    async deposit(chainId: number, privateKey: string, amount: string) {
+    async deposit(chainId: number, privateKey: string, amount: string, orderId: string) {
         const contract = this.getContract(chainId);
 
         const tx = await contract.deposit.populateTransaction({
-            value: parseEther(amount)
+            value: parseEther(amount),
+            args: [orderId],
         });
 
         return this.txService.send({

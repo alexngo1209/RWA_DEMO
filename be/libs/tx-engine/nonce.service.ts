@@ -10,7 +10,10 @@ export class NonceService {
         private readonly providerFactory: ProviderFactory,
     ) { }
 
-    private redis = new IORedis(this.configService.get<string>('redis.url'));
+    private redis = new IORedis({
+        host: this.configService.get<string>('redis.host'),
+        port: this.configService.get<number>('redis.port')
+    });
 
     private key(chainId: number, address: string) {
         return `nonce:${chainId}:${address}`;

@@ -209,3 +209,23 @@ ONLY output FULL CODE with file paths like:
 * Code must be copy-paste runnable
 
 ---
+
+# 🔥 FINAL FLOW (UPDATED)
+1. User → POST /orders
+        ↓
+   orderId = 65f...
+
+2. Frontend:
+   deposit(orderId)
+
+3. Contract:
+   emit Deposit(user, amount, orderId)
+
+4. Indexer:
+   detect log
+
+5. Worker:
+   decode → orderId
+
+6. DB:
+   update order EXACTLY

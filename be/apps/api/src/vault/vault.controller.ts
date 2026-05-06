@@ -9,6 +9,18 @@ export class VaultController {
         private readonly vault: VaultService,
     ) { }
 
+    @Post('deposit')
+    async deposit(@Body() body: any) {
+        const { chainId, amount, orderId } = body;
+
+        return this.vault.deposit(
+            chainId,
+            this.configService.getOrThrow('adminPrivateKey'),
+            amount,
+            orderId
+        );
+    }
+
     @Post('withdraw')
     async withdraw(@Body() body: any) {
         const { chainId, amount } = body;

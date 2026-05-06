@@ -20,7 +20,11 @@ export class OrdersService {
       chainId: dto.chainId,
       status: OrderStatus.PENDING
     });
-    return order;
+
+    return {
+      orderId: order._id.toString(),
+      ...order.toObject()
+    };
   }
 
   async findAll(filter: { userId?: string, address?: string }) {

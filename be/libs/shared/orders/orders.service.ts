@@ -37,14 +37,16 @@ export class OrdersService {
         );
     }
 
-    async matchDeposit(address: string, amount: string, txHash: string, blockNumber: number) {
-        const order = await this.orderModel.findOne({
-            address,
-            amount,
-            status: OrderStatus.PENDING
-        }).sort({ createdAt: 1 });
+    async matchDeposit(address: string, amount: string, orderId: string, txHash: string, blockNumber: number) {
+        const order = await this.orderModel.findOne({ _id: orderId });
 
         if (!order) return;
+
+        if (order.address.toLowerCase() !== address.toLowerCase()) {
+            throw new Error('Address mismatch');
+        }
+
+        if (order.status === OrderStatus.COMPLETED) return;
 
         order.status = OrderStatus.COMPLETED;
         order.txHash = txHash;
