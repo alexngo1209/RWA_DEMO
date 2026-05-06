@@ -3,7 +3,8 @@ import { OrderStatus } from './@types';
 
 @Schema({ timestamps: true })
 export class Order {
-  @Prop() user: string;
+  @Prop() userId: string;
+  @Prop() address: string;
   @Prop() amount: string;
   @Prop() status: OrderStatus;
   @Prop() txHash?: string;

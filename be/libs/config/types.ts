@@ -30,6 +30,7 @@ export class Configuration {
         [chain: number]: string;
     };
     adminPrivateKey: string;
+    jwtSecret: string;
 }
 
 export const configuration = (): Configuration => {
@@ -68,5 +69,6 @@ export const configuration = (): Configuration => {
             137: process.env.POLYGON_VAULT || '',
         },
         adminPrivateKey: process.env.ADMIN_PRIVATE_KEY || '',
+        jwtSecret: process.env.JWT_SECRET || '',
     };
 };

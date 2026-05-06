@@ -14,13 +14,23 @@ export class OrdersService {
 
   async create(dto: CreateOrderDto) {
     const order = await this.orderModel.create({
-      ...dto,
+      userId: dto.userId,
+      address: dto.address,
+      amount: dto.amount,
+      chainId: dto.chainId,
       status: OrderStatus.PENDING
     });
     return order;
   }
 
-  async findAll() {
-    return this.orderModel.find().lean();
+  async findAll(filter: { userId?: string, address?: string }) {
+    const query = {};
+    if (filter.userId) {
+      query['userId'] = filter.userId;
+    }
+    if (filter.address) {
+      query['address'] = filter.address;
+    }
+    return this.orderModel.find(query).lean();
   }
 }

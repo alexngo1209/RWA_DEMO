@@ -1,31 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { randomBytes } from 'crypto';
-import { SiweMessage } from 'siwe';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { SiweService } from './siwe.service';
+import { UserService } from '../user/user.service';
+import { JWTPayload } from './type';
 
 @Injectable()
 export class AuthService {
-  private nonces = new Map<string, string>();
+  constructor(
+    private readonly siwe: SiweService,
+    private readonly users: UserService,
+    private readonly jwt: JwtService,
+  ) { }
 
-  generateNonce(address: string) {
-    const nonce = randomBytes(16).toString('hex');
-    this.nonces.set(address, nonce);
-    return nonce;
+  async getNonce(address: string) {
+    const nonce = this.siwe.generateNonce();
+
+    await this.users.createOrUpdateNonce(address, nonce);
+
+    return { nonce };
   }
 
   async verify(message: string, signature: string) {
-    const siwe = new SiweMessage(message);
-    const result = await siwe.verify({ signature });
+    const result = await this.siwe.verify(message, signature);
 
-    const expected = this.nonces.get(result.data.address);
+    const user = await this.users.findByAddress(result.data.address);
 
-    if (!expected || expected !== result.data.nonce) {
-      throw new Error('Invalid nonce');
+    if (!user || user.nonce !== result.data.nonce) {
+      throw new UnauthorizedException('Invalid nonce');
     }
 
-    this.nonces.delete(result.data.address);
+    await this.users.clearNonce(result.data.address);
+
+    const payload: JWTPayload = {
+      address: user.address,
+      userId: user._id.toString(),
+    };
+
+    const token = this.jwt.sign(payload);
 
     return {
-      address: result.data.address
+      accessToken: token,
+      user: {
+        id: user._id,
+        address: user.address,
+      },
     };
   }
 }

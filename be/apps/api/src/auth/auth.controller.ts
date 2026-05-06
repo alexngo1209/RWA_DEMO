@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { VerifyDto } from './dto/verify.dto';
 
@@ -7,13 +7,12 @@ export class AuthController {
   constructor(private readonly auth: AuthService) { }
 
   @Post('nonce')
-  getNonce(@Body('address') address: string) {
-    const nonce = this.auth.generateNonce(address);
-    return { nonce };
+  nonce(@Body('address') address: string) {
+    return this.auth.getNonce(address);
   }
 
   @Post('verify')
-  async verify(@Body() dto: VerifyDto) {
-    return this.auth.verify(dto.message, dto.signature);
+  verify(@Body() body: VerifyDto) {
+    return this.auth.verify(body.message, body.signature);
   }
 }

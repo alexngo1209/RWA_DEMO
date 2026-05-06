@@ -9,6 +9,7 @@ import { OrdersModule } from './orders/orders.module';
 import { HealthController } from './health.controller';
 import { ContractsModule } from '@libs/contracts/contracts.module';
 import { VaultModule } from './vault/vault.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { VaultModule } from './vault/vault.module';
     OrdersModule,
     ContractsModule,
     VaultModule,
+    UserModule,
   ],
   controllers: [HealthController]
 })

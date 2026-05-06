@@ -1,5 +1,6 @@
 export class CreateOrderDto {
-    user: string;
+    userId: string;
+    address: string;
     amount: string;
     chainId: number;
 }
