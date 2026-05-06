@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Order } from '@libs/db/schemas/order.schema';
 import { OrderStatus } from '@libs/db/schemas/@types';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -11,7 +12,7 @@ export class OrdersService {
         private readonly orderModel: Model<Order>
     ) { }
 
-    async create(dto: any) {
+    async create(dto: CreateOrderDto) {
         return this.orderModel.create({
             ...dto,
             status: OrderStatus.PENDING
@@ -34,5 +35,21 @@ export class OrdersService {
             { blockNumber: { $gte: blockNumber } },
             { status: OrderStatus.PENDING }
         );
+    }
+
+    async matchDeposit(user: string, amount: string, txHash: string, blockNumber: number) {
+        const order = await this.orderModel.findOne({
+            user,
+            amount,
+            status: OrderStatus.PENDING
+        }).sort({ createdAt: 1 });
+
+        if (!order) return;
+
+        order.status = OrderStatus.COMPLETED;
+        order.txHash = txHash;
+        order.blockNumber = blockNumber;
+
+        await order.save();
     }
 }

@@ -6,7 +6,9 @@ export class Order {
   @Prop() user: string;
   @Prop() amount: string;
   @Prop() status: OrderStatus;
-  @Prop() txHash: string;
+  @Prop() txHash?: string;
+  @Prop() chainId: number;
+  @Prop() blockNumber?: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

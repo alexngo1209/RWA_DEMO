@@ -63,9 +63,9 @@ export class DefaultProcessor extends WorkerHost {
         const user = decoded.args.user;
         const amount = decoded.args.amount.toString();
 
-        await this.ordersService.markCompleted(log.transactionHash);
+        await this.ordersService.matchDeposit(user, amount, log.transactionHash, log.blockNumber);
 
-        console.log('Deposit detected:', user, amount);
+        console.log('Deposit detected:', user, amount, log.transactionHash, log.blockNumber);
       }
 
       if (decoded.name === 'Withdraw') {
