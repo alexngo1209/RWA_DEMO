@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { HealthController } from './health.controller';
 import { ContractsModule } from '@libs/contracts/contracts.module';
+import { VaultModule } from './vault/vault.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { ContractsModule } from '@libs/contracts/contracts.module';
     TxEngineModule,
     AuthModule,
     OrdersModule,
-    ContractsModule
+    ContractsModule,
+    VaultModule,
   ],
   controllers: [HealthController]
 })

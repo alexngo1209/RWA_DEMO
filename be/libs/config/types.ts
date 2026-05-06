@@ -29,6 +29,7 @@ export class Configuration {
     vaults: {
         [chain: number]: string;
     };
+    adminPrivateKey: string;
 }
 
 export const configuration = (): Configuration => {
@@ -65,6 +66,7 @@ export const configuration = (): Configuration => {
             1: process.env.ETH_VAULT || '',
             56: process.env.BSC_VAULT || '',
             137: process.env.POLYGON_VAULT || '',
-        }
+        },
+        adminPrivateKey: process.env.ADMIN_PRIVATE_KEY || '',
     };
 };
