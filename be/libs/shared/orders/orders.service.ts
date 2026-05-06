@@ -37,9 +37,9 @@ export class OrdersService {
         );
     }
 
-    async matchDeposit(user: string, amount: string, txHash: string, blockNumber: number) {
+    async matchDeposit(address: string, amount: string, txHash: string, blockNumber: number) {
         const order = await this.orderModel.findOne({
-            user,
+            address,
             amount,
             status: OrderStatus.PENDING
         }).sort({ createdAt: 1 });
@@ -51,5 +51,9 @@ export class OrdersService {
         order.blockNumber = blockNumber;
 
         await order.save();
+    }
+
+    async matchWithdraw(address: string, amount: string, txHash: string, blockNumber: number) {
+        /// do something when withdraw is matched
     }
 }

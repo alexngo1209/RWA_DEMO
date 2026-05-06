@@ -60,16 +60,21 @@ export class DefaultProcessor extends WorkerHost {
       if (!decoded) continue;
 
       if (decoded.name === 'Deposit') {
-        const user = decoded.args.user;
+        const address = decoded.args.user.toLowerCase();
         const amount = decoded.args.amount.toString();
 
-        await this.ordersService.matchDeposit(user, amount, log.transactionHash, log.blockNumber);
+        await this.ordersService.matchDeposit(address, amount, log.transactionHash, log.blockNumber);
 
-        console.log('Deposit detected:', user, amount, log.transactionHash, log.blockNumber);
+        console.log('Deposit detected:', address, amount, log.transactionHash, log.blockNumber);
       }
 
       if (decoded.name === 'Withdraw') {
-        console.log('Withdraw detected');
+        const address = decoded.args.user.toLowerCase();
+        const amount = decoded.args.amount.toString();
+
+        await this.ordersService.matchWithdraw(address, amount, log.transactionHash, log.blockNumber);
+
+        console.log('Withdraw detected', address, amount);
       }
     }
   }
