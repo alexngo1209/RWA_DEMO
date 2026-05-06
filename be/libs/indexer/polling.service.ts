@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { ProviderFactory } from '@libs/blockchain/provider.factory';
 import { BlockStateService } from './block-state.service';
 import { QueueService } from '@libs/queue/queue.service';
 import { ReorgService } from '@libs/reorg/reorg.service';
-import { CHAINS, BATCH_SIZE } from './constants';
+import { BATCH_SIZE } from './constants';
 import { MetricsService } from '@libs/metrics/metrics.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -21,9 +21,9 @@ export class PollingService {
         private readonly metrics: MetricsService
     ) { }
 
-    @Cron('*/10 * * * * *')
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async poll() {
-        for (const chainId of CHAINS) {
+        for (const chainId of this.configService.get('chains', []) || []) {
             await this.processChain(chainId);
         }
     }

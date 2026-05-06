@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { ProviderFactory } from '@libs/blockchain/provider.factory';
 import { QueueService } from '@libs/queue/queue.service';
-import { CHAINS } from './constants';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class RealtimeService implements OnModuleInit {
     ) { }
 
     async onModuleInit() {
-        for (const chainId of CHAINS) {
+        for (const chainId of this.configService.get('chains', []) || []) {
             this.listen(chainId);
         }
     }

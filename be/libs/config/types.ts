@@ -19,6 +19,7 @@ export class Configuration {
         host: string;
         port: number;
     };
+    chains: number[];
     rpcs: {
         [chain: number]: string[],
     };
@@ -46,6 +47,7 @@ export const configuration = (): Configuration => {
             host: process.env.REDIS_HOST || 'localhost',
             port: parseInt(process.env.REDIS_PORT) || 6379,
         },
+        chains: process.env.CHAINS?.split(',').map((chain) => Number(chain)) || [],
         rpcs: {
             1: [process.env.ETH_RPC_1, process.env.ETH_RPC_2].filter((rpc) => rpc),
             56: [process.env.BSC_RPC_1, process.env.BSC_RPC_2].filter((rpc) => rpc),
