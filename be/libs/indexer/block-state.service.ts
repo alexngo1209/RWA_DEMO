@@ -5,7 +5,10 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class BlockStateService {
     constructor(private readonly configService: ConfigService) { }
-    private redis = new IORedis(this.configService.get<string>('redis.url') || 'redis://redis:6379');
+    private redis = new IORedis({
+        host: this.configService.get<string>('redis.host'),
+        port: this.configService.get<number>('redis.port')
+    });
 
     async getLastBlock(chainId: number): Promise<number | null> {
         const v = await this.redis.get(`block:${chainId}`);
