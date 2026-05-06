@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MetricsService } from './metrics.service';
 import { MetricsController } from './metrics.controller';
-import { ConfigModule } from '@libs/config/config.module';;
+import { ConfigModule } from '@libs/config/config.module'; import { TxEngineModule } from '@libs/tx-engine/tx-engine.module';
+;
 
 @Module({
     imports: [ConfigModule],

@@ -6,9 +6,16 @@ import { DbModule } from '@libs/db/db.module';
 import { OrdersModule } from '../../api/src/orders/orders.module';
 import { DefaultProcessor } from './processor';
 import { MetricsModule } from '@libs/metrics/metrics.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Event, EventSchema } from '@libs/db/schemas/event.schema';
+import { Block, BlockSchema } from '@libs/db/schemas/block.schema';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([
+      { name: Event.name, schema: EventSchema },
+      { name: Block.name, schema: BlockSchema }
+    ]),
     QueueModule,
     IndexerModule,
     ReorgModule,

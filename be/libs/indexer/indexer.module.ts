@@ -8,6 +8,7 @@ import { QueueModule } from '@libs/queue/queue.module';
 import { DbModule } from '@libs/db/db.module';
 import { MetricsModule } from '@libs/metrics/metrics.module';
 import { ConfigModule } from '@libs/config/config.module';
+import { ReorgModule } from '@libs/reorg/reorg.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule } from '@libs/config/config.module';
     DbModule,
     MetricsModule,
     ConfigModule,
+    ReorgModule,
   ],
   providers: [
     PollingService,

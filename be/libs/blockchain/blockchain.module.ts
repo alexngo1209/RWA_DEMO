@@ -4,7 +4,7 @@ import { ConfigModule } from '@libs/config/config.module';
 
 @Module({
   imports: [
-    ConfigModule
+    ConfigModule,
   ],
   providers: [ProviderFactory],
   exports: [ProviderFactory],
