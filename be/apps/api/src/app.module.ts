@@ -7,6 +7,7 @@ import { TxEngineModule } from '@libs/tx-engine/tx-engine.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { HealthController } from './health.controller';
+import { ContractsModule } from '@libs/contracts/contracts.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { HealthController } from './health.controller';
     BlockchainModule,
     TxEngineModule,
     AuthModule,
-    OrdersModule
+    OrdersModule,
+    ContractsModule
   ],
   controllers: [HealthController]
 })

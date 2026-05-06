@@ -26,6 +26,9 @@ export class Configuration {
     contracts: {
         [chain: number]: string;
     };
+    vaults: {
+        [chain: number]: string;
+    };
 }
 
 export const configuration = (): Configuration => {
@@ -58,5 +61,10 @@ export const configuration = (): Configuration => {
             56: process.env.BSC_CONTRACT || '',
             137: process.env.POLYGON_CONTRACT || '',
         },
+        vaults: {
+            1: process.env.ETH_VAULT || '',
+            56: process.env.BSC_VAULT || '',
+            137: process.env.POLYGON_VAULT || '',
+        }
     };
 };

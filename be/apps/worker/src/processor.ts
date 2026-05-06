@@ -5,8 +5,8 @@ import { Model } from 'mongoose';
 import { Event } from '@libs/db/schemas/event.schema';
 import { Block } from '@libs/db/schemas/block.schema';
 import { BlockTrackerService } from '@libs/reorg/block-tracker.service';
-import { OrdersService } from '../../api/src/orders/orders.service';
-import { MetricsService } from '@libs/metrics/metrics.service';
+import { OrdersService } from '@libs/shared/orders/orders.service';
+import { DecoderService } from '@libs/contracts/decoder.service';
 
 @Processor('default')
 export class DefaultProcessor extends WorkerHost {
@@ -15,27 +15,18 @@ export class DefaultProcessor extends WorkerHost {
     @InjectModel(Block.name) private blockModel: Model<Block>,
     private readonly tracker: BlockTrackerService,
     private readonly ordersService: OrdersService,
-    private readonly metrics: MetricsService
+    private readonly decoder: DecoderService
   ) {
     super();
   }
 
   async process(job: Job<any>): Promise<any> {
-    const end = this.metrics.jobDuration.startTimer();
-
-    try {
-      switch (job.name) {
-        case 'events':
-          return this.handleEvents(job.data);
-        case 'blocks':
-          return this.handleBlocks(job.data);
-      }
-      this.metrics.jobsProcessed.inc();
-    } finally {
-      end();
+    switch (job.name) {
+      case 'events':
+        return this.handleEvents(job.data);
+      case 'blocks':
+        return this.handleBlocks(job.data);
     }
-
-
   }
 
   private async handleEvents(data: any) {
@@ -63,9 +54,23 @@ export class DefaultProcessor extends WorkerHost {
       await this.eventModel.bulkWrite(ops);
     }
 
-    // 🔥 Example: link event → order
+    // 🔥 DOMAIN MAPPING (REAL PRODUCTION PATTERN)
     for (const log of logs) {
-      await this.ordersService.markCompleted(log.transactionHash);
+      const decoded = this.decoder.decode(log);
+      if (!decoded) continue;
+
+      if (decoded.name === 'Deposit') {
+        const user = decoded.args.user;
+        const amount = decoded.args.amount.toString();
+
+        await this.ordersService.markCompleted(log.transactionHash);
+
+        console.log('Deposit detected:', user, amount);
+      }
+
+      if (decoded.name === 'Withdraw') {
+        console.log('Withdraw detected');
+      }
     }
   }
 

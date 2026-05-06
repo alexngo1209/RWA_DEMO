@@ -9,6 +9,7 @@ import { MetricsModule } from '@libs/metrics/metrics.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Event, EventSchema } from '@libs/db/schemas/event.schema';
 import { Block, BlockSchema } from '@libs/db/schemas/block.schema';
+import { ContractsModule } from '@libs/contracts/contracts.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Block, BlockSchema } from '@libs/db/schemas/block.schema';
     DbModule,
     OrdersModule,
     MetricsModule,
+    ContractsModule
 
   ],
   providers: [DefaultProcessor]
