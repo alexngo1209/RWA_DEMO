@@ -7,6 +7,7 @@ import { ConfigModule } from '@libs/config/config.module';
 import { JwtAuthGuard } from './jwt.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { SiweService } from './siwe.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SiweService } from './siwe.service';
       }),
       inject: [ConfigService],
     }),
+    UserModule
   ],
   providers: [AuthService, JwtAuthGuard, JwtStrategy, SiweService],
   controllers: [AuthController],
